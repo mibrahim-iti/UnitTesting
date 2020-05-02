@@ -1,0 +1,32 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+	id 'java'
+}
+
+dependencies {
+	implementation 'javax.mail:mail:1.4.7'
+}
+
+//This is for global tests
+test {
+	testLogging {
+        events TestLogEvent.FAILED,
+               TestLogEvent.PASSED,
+               TestLogEvent.SKIPPED
+	}
+}
+
+task dateTimeTest(type: Test) {
+	// This logging for only this task
+	testLogging {
+	        events TestLogEvent.FAILED,
+	               TestLogEvent.PASSED,
+	               TestLogEvent.SKIPPED
+	}
+	description = "Runs a 'dateTime' tag tests only"
+	useJUnitPlatform {
+		includeTags 'dateTime'
+	}
+}

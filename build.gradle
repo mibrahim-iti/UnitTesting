@@ -1,0 +1,51 @@
+//allprojects {
+//    apply plugin: 'java'
+//}
+buildscript {
+    ext {
+    	slf4j_version = '1.7.30'
+    	
+    	jupiter_version = '5.6.2'
+    	
+    	h2_database_version = '1.4.200'
+        java_persistence_version = '2.2'
+        mockito_version = '1.10.19'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.h2database:h2:${h2_database_version}"
+    }
+}
+
+
+subprojects {
+  apply plugin: 'java'
+  
+  sourceCompatibility = JavaVersion.VERSION_11
+
+  repositories {
+    mavenCentral()
+  }
+  
+  dependencies {
+        implementation "org.slf4j:slf4j-api:${slf4j_version}"
+    }
+}
+
+group = 'com.mibrahim'
+version = '0.0.1-SNAPSHOT'
+
+project(':Junit5'){
+    dependencies {
+        implementation "org.junit.jupiter:junit-jupiter-api:${jupiter_version}"
+        
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jupiter_version}"
+    	testImplementation "org.junit.jupiter:junit-jupiter:${jupiter_version}"
+    }
+    test {
+		useJUnitPlatform()
+    }
+}
