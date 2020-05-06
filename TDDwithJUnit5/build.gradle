@@ -1,0 +1,53 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+	id 'java'
+	id 'jacoco'
+}
+
+dependencies {
+	implementation 'org.junit.jupiter:junit-jupiter-params:${jupiter_version}'
+	
+	testImplementation "org.mockito:mockito-all:${mockito_version}"
+}
+
+//This is for global tests
+test {
+	testLogging {
+        events TestLogEvent.FAILED,
+               TestLogEvent.PASSED,
+               TestLogEvent.SKIPPED
+	}
+}
+
+task dateTimeTest(type: Test) {
+	// This logging for only this task
+	testLogging {
+	        events TestLogEvent.FAILED,
+	               TestLogEvent.PASSED,
+	               TestLogEvent.SKIPPED
+	}
+	description = "Runs a 'dateTime' tag tests only"
+	useJUnitPlatform {
+		includeTags 'dateTime'
+	}
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}  
+
+//To export a jacoco report after run tests
+test.finalizedBy jacocoTestReport
+//check.dependsOn jacocoTestCoverageVerification
