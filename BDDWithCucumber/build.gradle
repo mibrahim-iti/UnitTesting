@@ -44,6 +44,7 @@ task cucumber() {
         }
     }
 }
+cucumber.finalizedBy jacocoTestReport
 
 jacocoTestReport {
     executionData fileTree(buildDir).include("/results/jacoco/*.exec")

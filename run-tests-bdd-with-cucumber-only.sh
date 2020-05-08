@@ -8,4 +8,4 @@ cd ./BDDWithCucumber
 
 echo -e $flashredtput'Running all tests for BDDWithCucumber now...'
 #gradle clean cucumber
-gradle clean cucumber jacocoTestReport
+gradle clean cucumber
