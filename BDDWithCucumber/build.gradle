@@ -30,52 +30,29 @@ configurations {
 }
 
 task cucumber() {
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava    
     doLast {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = ['--plugin', 'pretty', '--glue', 'com.mibrahim.airport', 'src/test/resources']
+            
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+	        jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/results/jacoco/cucumber.exec,append=false"]
+	        
+	        jacocoTestReport
         }
     }
 }
 
-//This is for global tests
-test {
-	testLogging {
-        events TestLogEvent.FAILED,
-               TestLogEvent.PASSED,
-               TestLogEvent.SKIPPED
-	}
-}
-
-task dateTimeTest(type: Test) {
-	// This logging for only this task
-	testLogging {
-	        events TestLogEvent.FAILED,
-	               TestLogEvent.PASSED,
-	               TestLogEvent.SKIPPED
-	}
-	description = "Runs a 'dateTime' tag tests only"
-	useJUnitPlatform {
-		includeTags 'dateTime'
-	}
-}
-
-jacoco {
-    toolVersion = "0.8.5"
-    reportsDir = file("$buildDir/customJacocoReportDir")
-}
-
 jacocoTestReport {
+    executionData fileTree(buildDir).include("/results/jacoco/*.exec")
     reports {
         xml.enabled false
         csv.enabled false
         html.enabled true
         html.destination file("${buildDir}/jacocoHtml")
     }
-}  
-
-//To export a jacoco report after run tests
-test.finalizedBy jacocoTestReport
-//check.dependsOn jacocoTestCoverageVerification
+    dependsOn test
+    dependsOn "cucumber"
+}
