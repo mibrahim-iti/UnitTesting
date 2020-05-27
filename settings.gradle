@@ -1,2 +1,2 @@
 rootProject.name = 'UnitTesting'
-include 'Junit5', 'TDDwithJUnit5', 'BDDWithCucumber'
+include 'Junit5', 'TDDwithJUnit5', 'BDDWithCucumber', 'HandsOnCucumber'

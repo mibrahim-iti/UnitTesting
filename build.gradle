@@ -73,3 +73,12 @@ project(':BDDWithCucumber'){
 		useJUnitPlatform()
     }
 }
+
+project(':HandsOnCucumber'){
+    dependencies {
+    }
+    test {
+		useJUnitPlatform()
+    }
+}
+
